@@ -24,6 +24,11 @@ class QuestionController {
 
     static getAll(req, res) {
         Question.find().sort({created_at : 'desc'})
+        .populate({
+            path: 'answers',
+            populate: { path: 'author'}
+        })
+        .populate('author')
         .then(questions => {
             res.json(questions)
         })
@@ -38,6 +43,11 @@ class QuestionController {
     static getAllUserQuestion(req, res) {
         let {_id} = req.user
         Question.find({author: _id}).sort({created_at : 'desc'})
+        .populate({
+            path: 'answers',
+            populate: { path: 'author'}
+        })
+        .populate('author')
         .then(questions => {
             res.json(questions)
         })

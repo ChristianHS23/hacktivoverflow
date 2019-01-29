@@ -15,7 +15,8 @@ export default new Vuex.Store({
     check: {
       isLogin: false,
       isNotLogin: true
-    }
+    },
+    questions: []
   },
   mutations: {
     mcheckLogin (state) {
@@ -26,11 +27,27 @@ export default new Vuex.Store({
         state.check.isLogin = false
         state.check.isNotLogin = true
       }
+    },
+    mgetquestion (state, data) {
+      state.questions = data
     }
   },
   actions: {
     checkLogin({commit}) {
       commit('mcheckLogin')
+    },
+
+    getQuestion({commit}) {
+      axios({
+        method: 'get',
+        url: `${server}/question/`
+      })
+      .then(({data}) => {
+        commit('mgetquestion', data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
 
     loginUser ({ commit }, objUser) {

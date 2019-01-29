@@ -38,10 +38,13 @@
 
             <v-list-tile
               @click="dialog = false"
+              to="/ask"
             >
+
               <v-list-tile-action >
                 <v-icon>add</v-icon>
               </v-list-tile-action>
+              <!-- <router-link to="/ask" tag="button"> -->
               <v-list-tile-content>
                 <v-list-tile-title>
                   Create New Question
@@ -91,11 +94,7 @@
 
     </v-toolbar>
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout justify-center>
           <router-view></router-view>
-        </v-layout>
-      </v-container>
     </v-content>
 
   </v-app>
