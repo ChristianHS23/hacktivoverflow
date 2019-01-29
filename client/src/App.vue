@@ -1,31 +1,139 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      v-model="drawer"
+      fixed
+      app
+      v-if="check.isLogin"
+    >
+      <v-list dense>
+        <template>
+          
+
+          <v-list-tile @click="dialog = false">
+            <v-list-tile-action>
+              <v-icon>contacts</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>
+                Asked
+              </v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-group
+            v-if="list"
+            v-model="list.model"
+            :prepend-icon="list.model ? list.icon : list['icon-alt']"
+            append-icon=""
+          >
+            <v-list-tile slot="activator">
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  Need Help?
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile
+              @click="dialog = false"
+            >
+              <v-list-tile-action >
+                <v-icon>add</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>
+                  Create New Question
+                </v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+
+        </template>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar
+      :clipped-left="$vuetify.breakpoint.lgAndUp"
+      color="blue darken-3"
+      dark
+      app
+      fixed
+    >
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <router-link to="/" tag="button">
+          <span class="hidden-sm-and-down">Stalker Overflow</span>
+        </router-link>
+      </v-toolbar-title>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="search"
+        label="Search"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+
+        <register v-if="check.isNotLogin" />
+        <login v-if="check.isNotLogin"/>
+
+        <v-btn
+        v-if="check.isLogin"
+        flat
+        dark
+        @click="logout"
+        >
+        Logout
+        </v-btn>
+
+    </v-toolbar>
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout justify-center>
+          <router-view></router-view>
+        </v-layout>
+      </v-container>
+    </v-content>
+
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script>
+import register from '@/components/register.vue'
+import login from '@/components/login.vue'
+import { mapState } from 'vuex'
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+export default {
+  data: () => ({
+    drawer: null,
+    list : {
+        icon: 'keyboard_arrow_up',
+        'icon-alt': 'keyboard_arrow_down',
+        text: 'Need Help?',
+        model: true,
+      }
+  }),
+  computed: mapState([
+    'check'
+  ]),
+  components: {
+    register,
+    login
+  },
+  props: {
+    source: String
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('token')
+      this.$store.dispatch('checkLogin')
+    }
+  },
+  created () {
+    this.$store.dispatch('checkLogin')
+  }
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
