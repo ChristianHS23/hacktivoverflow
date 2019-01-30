@@ -16,7 +16,7 @@
                     <v-textarea
                     box
                     name="input-7-4"
-                    label="Box textarea"
+                    label="Box textarea"    
                     ></v-textarea>
                 </v-flex>
                 <!-- <v-flex xs12>

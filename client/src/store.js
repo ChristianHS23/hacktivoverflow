@@ -16,7 +16,8 @@ export default new Vuex.Store({
       isLogin: false,
       isNotLogin: true
     },
-    questions: []
+    questions: [],
+    question: {}
   },
   mutations: {
     mcheckLogin (state) {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
     },
     mgetquestion (state, data) {
       state.questions = data
+    },
+    mgetsinglequestion(state, data) {
+      state.question = data
     }
   },
   actions: {
@@ -44,6 +48,37 @@ export default new Vuex.Store({
       })
       .then(({data}) => {
         commit('mgetquestion', data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+
+    getSingleQuestion({commit}, questionId) {
+      axios({
+        method: 'get',
+        url: `${server}/question/${questionId}`
+      })
+      .then(({data}) => {
+        if(!data.voters.length) {
+          data.voters = data.voters.length
+        } else{
+          let upvote = data.voters.filter(e => e.status === "upvote").length
+          let downvote = data.voters.filter(e => e.status === "downvote").length
+          data.voters = upvote - downvote
+        }
+        if(data.answers.length) {
+          data.answers.voters = data.answers.map(e => {
+            if(!e.voters.length) {
+              return e.voters = e.voters.length
+            } else {
+              let upvote = e.voters.filter(v => v.status === 'upvote').length
+              let downvote = e.voters.filter(v => v.status === 'downvote').length
+              return e.voters = upvote - downvote
+            }
+          })
+        }
+        commit('mgetsinglequestion', data)
       })
       .catch(err => {
         console.log(err)

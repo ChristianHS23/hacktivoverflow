@@ -30,7 +30,9 @@
                 <v-flex xs9>
                     <v-card-title>
                         <div class="text-truncate">
-                            {{question.title}}
+                            <router-link :to="{name: 'question', params: {id: question._id}} ">
+                                    {{question.title}}
+                            </router-link>
                         </div>
                     </v-card-title>
                     <v-card-text>
@@ -46,7 +48,9 @@
                         <p>Posted By</p>
                         <small>{{question.author.username}}</small>
                         <br>
+                        <div class="text-truncate">
                         <small>{{question.author.email}}</small>
+                        </div>
                         </v-flex>
                         <v-spacer></v-spacer>
                         <v-flex xs12>

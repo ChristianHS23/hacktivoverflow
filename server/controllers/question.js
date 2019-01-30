@@ -40,6 +40,26 @@ class QuestionController {
         })
     }
 
+    static getOne(req, res) {
+        let _id = req.params.questionId
+        Question.findOne({_id })
+        .populate({
+            path: 'answers',
+            populate: { path: 'author'}
+        })
+        .populate('author')
+        .then(question => {
+            console.log(question)
+            res.json(question)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                msg: 'Internal Server Error'
+            })
+        })
+    }
+
     static getAllUserQuestion(req, res) {
         let {_id} = req.user
         Question.find({author: _id}).sort({created_at : 'desc'})

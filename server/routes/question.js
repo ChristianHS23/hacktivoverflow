@@ -4,6 +4,7 @@ const {QuestionController} = require('../controllers')
 
 
 router.get('/', QuestionController.getAll)
+router.get('/:questionId', QuestionController.getOne)
 
 router.use(checkLogin)
 router.post('/', QuestionController.create)

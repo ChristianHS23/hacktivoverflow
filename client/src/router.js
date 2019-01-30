@@ -18,6 +18,12 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/Ask.vue')
+    },
+    {
+      path: '/question/:id',
+      name: 'question',
+
+      component: () => import('./views/Question.vue')
     }
   ]
 })

@@ -80,6 +80,10 @@
       ></v-text-field>
       <v-spacer></v-spacer>
 
+      <v-btn icon to="/">
+        <v-icon>home</v-icon>
+      </v-btn>
+
         <register v-if="check.isNotLogin" />
         <login v-if="check.isNotLogin"/>
 
