@@ -25,9 +25,16 @@
                                 <h1 class="text-md-center">{{question.title}}</h1>
                             </a>
                         </v-flex>
-                        
+
                         <v-flex xs12>
                             <p class="card-text" v-html="question.description"></p>
+                        </v-flex>
+
+                        <v-flex xs12>
+                            <v-layout  align-center justify-end row fill-height>
+                                <v-btn flat color="warning" :to="{name: 'edit-question', params: {id: question._id}}">Edit</v-btn>
+                                <v-btn flat color="error" @click="deleteQuestion">Delete</v-btn>
+                            </v-layout>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -57,28 +64,32 @@
                             </v-layout>
                         </v-flex>
 
-                        <v-flex xs11>
+                        <v-flex xs9>
                             <v-layout column>
-                                <v-flex xs12>
-                                    <h3>{{answer.title}}</h3>
-                                </v-flex>
                                 <v-flex xs12>
                                     <p class="card-text" v-html="answer.description"></p>
                                 </v-flex>
                                 <br>
                             </v-layout>
                         </v-flex>
+
+                        <v-flex xs2>
+                            <v-layout  align-center justify-end row fill-height>
+                                <v-btn flat color="warning" :to="{name: 'edit-answer', params: {id: answer._id}}">Edit</v-btn>
+                            </v-layout>
+                        </v-flex>
+
                     </v-layout>
                 </v-card>
             </v-container>
-            
+
             <v-card>
                 <v-layout align-center column>
                     <v-flex xs12>
                         <wysiwyg v-model="answer.description" />
                     </v-flex>
                     <v-btn
-                    flat 
+                    flat
                     color="primary"
                     @click="createAnswer"
                     >
@@ -91,83 +102,92 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
 export default {
-    name: 'QuestionDetail',
-    data() {
-        return {
-            answer: {
-                description: ''
-            }
-        }
+  name: 'QuestionDetail',
+  data () {
+    return {
+      answer: {
+        description: ''
+      }
+    }
+  },
+  computed: {
+    question () {
+      return this.$store.state.question
+    }
+  },
+  methods: {
+    upvoteQuestion () {
+      this.$store.dispatch('upvoteQuestion', this.question._id)
+        .then(() => {
+          this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+        })
+        .catch((err) => {
+          this.$swal('You Need Login First', '', 'error')
+        })
     },
-    computed: {
-        question () {
-            return this.$store.state.question
-        },
+    downvoteQuestion () {
+      this.$store.dispatch('downvoteQuestion', this.question._id)
+        .then(() => {
+          this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+        })
+        .catch((err) => {
+          this.$swal('You Need Login First', '', 'error')
+        })
     },
-    methods: {
-        upvoteQuestion() {
-            this.$store.dispatch('upvoteQuestion', this.question._id)
-            .then(() => {
-                this.$store.dispatch('getSingleQuestion', this.$route.params.id)
-            })
-            .catch((err)=> {
-                this.$swal('You Need Login First','','error')
-                console.log(err)
-            })
-        },
-        downvoteQuestion() {
-            this.$store.dispatch('downvoteQuestion', this.question._id)
-            .then(() => {
-                this.$store.dispatch('getSingleQuestion', this.$route.params.id)
-            })
-            .catch((err)=> {
-                this.$swal('You Need Login First','','error')
-                console.log(err)
-            })
-        },
-        upvoteAnswer(answerId) {
-            this.$store.dispatch('upvoteAnswer', answerId)
-            .then(() => {
-                this.$store.dispatch('getSingleQuestion', this.$route.params.id)
-            })
-            .catch((err)=> {
-                this.$swal('You Need Login First','','error')
-                console.log(err)
-            })
-        },
-        downvoteAnswer(answerId) {
-            this.$store.dispatch('downvoteAnswer', answerId)
-            .then(() => {
-                this.$store.dispatch('getSingleQuestion', this.$route.params.id)
-            })
-            .catch((err)=> {
-                this.$swal('You Need Login First','','error')
-                console.log(err)
-            })
-        },
-        createAnswer() {
-            let data = {
-                answer : this.answer,
-                questionId : this.$route.params.id
-            }
+    upvoteAnswer (answerId) {
+      this.$store.dispatch('upvoteAnswer', answerId)
+        .then(() => {
+          this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+        })
+        .catch((err) => {
+          this.$swal('You Need Login First', '', 'error')
+        })
+    },
+    downvoteAnswer (answerId) {
+      this.$store.dispatch('downvoteAnswer', answerId)
+        .then(() => {
+          this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+        })
+        .catch((err) => {
+          this.$swal('You Need Login First', '', 'error')
+        })
+    },
+    createAnswer () {
+      let data = {
+        answer: this.answer,
+        questionId: this.$route.params.id
+      }
 
-            this.$store.dispatch('createAnswer', data)
-            .then(result => {
-                this.$swal('Success Create Answer', '', 'success')
-                this.$store.dispatch('getSingleQuestion', this.$route.params.id)
-                this.answer.description = ''
-            })
-            .catch(err => {
-                this.$swal('You Need Login First','','error')
-                console.log(err)
-            })
-        }
+      this.$store.dispatch('createAnswer', data)
+        .then(result => {
+          this.$swal('Success Create Answer', '', 'success')
+          this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+          this.answer.description = ''
+        })
+        .catch(err => {
+          this.$swal('You Need Login First', '', 'error')
+        })
     },
-    created() {
-        this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+    deleteQuestion() {
+        this.$swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this question",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+            .then((willDelete) => {
+            if (willDelete) {
+                this.$store.dispatch('deleteQuestion', this.$route.params.id)
+            } 
+        });
+
     },
+  },
+  created () {
+    this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+  }
 }
 </script>
 

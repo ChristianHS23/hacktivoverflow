@@ -19,7 +19,7 @@ function checkLogin(req, res, next) {
         }
     } catch(err) {
         console.log(err)
-        res.status(402).json({
+        res.status(401).json({
             msg: 'Invalid Token'
         })
     }
@@ -38,7 +38,7 @@ function checkQuestion(req, res, next) {
             }
         })
     }catch(err) {
-        res.status(402).json({
+        res.status(401).json({
             msg: 'You are unauthorized to edit or change this data'
         })
     }
@@ -47,17 +47,23 @@ function checkQuestion(req, res, next) {
 function checkAnswer(req, res, next) {
     let {answerId} = req.params
     let userId = req.user._id
+    console.log(userId)
+    console.log(answerId)
     try {
         Answer.findById(answerId)
         .then(answer => {
+            console.log(answer)
             if(answer.author.toString() == userId.toString()) {
                 next()
             } else {
                 next('You are unauthorized to edit or change this data')
             }
         })
+        .catch(err => {
+            // console.log(err)
+        })
     }catch(err) {
-        res.status(402).json({
+        res.status(401).json({
             msg: 'You are unauthorized to edit or change this data'
         })
     }

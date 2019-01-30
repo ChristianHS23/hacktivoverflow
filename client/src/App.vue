@@ -11,7 +11,7 @@
         <template>
           
 
-          <v-list-tile @click="dialog = false">
+          <v-list-tile @click="dialog = false" to="/">
             <v-list-tile-action>
               <v-icon>contacts</v-icon>
             </v-list-tile-action>

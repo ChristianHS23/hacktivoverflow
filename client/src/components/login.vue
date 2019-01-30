@@ -66,14 +66,14 @@ export default {
   methods: {
     loginUser () {
       this.$store.dispatch('loginUser', this.user)
-      .then(() =>{
+        .then(() => {
           this.user.email = ''
           this.user.password = ''
           this.dialog = false
-      })
-      .catch(err => {
+        })
+        .catch(err => {
           console.log(err)
-      })
+        })
     }
   }
 }

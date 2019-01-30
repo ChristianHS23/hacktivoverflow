@@ -4,8 +4,8 @@ class AnswerController {
     static create(req, res) {
         let {question} = req.params
         let author = req.user._id
-        let {title, description} = req.body
-        Answer.create({title, description, question, author})
+        let { description} = req.body
+        Answer.create({ description, question, author})
         .then(answer => {
             res.status(201).json(answer)
         })
@@ -18,13 +18,14 @@ class AnswerController {
     }
 
     static edit(req, res) {
-        let {answerid} = req.params
-        let { title, description} = req.body
-        Answer.findByIdAndUpdate(answerid, {title, description})
+        let {answerId} = req.params
+        let { description} = req.body
+        Answer.findOneAndUpdate({_id: answerId}, { description})
         .then(answer => {
             res.json(answer)
         })
         .catch(err  => {
+            console.log(err)
             res.status(500).json({
                 msg: 'Internal Server Error'
             })
@@ -37,6 +38,22 @@ class AnswerController {
             res.json(answers)
         })
         .catch(err => {
+            res.status(500).json({
+                msg: 'Internal Server Error'
+            })
+        })
+    }
+
+    static getOne(req, res) {
+        let _id = req.params.answerId
+        Answer.findOne({_id })
+        .populate('author')
+        .then(answer => {
+            console.log(answer)
+            res.json(answer)
+        })
+        .catch(err => {
+            console.log(err)
             res.status(500).json({
                 msg: 'Internal Server Error'
             })

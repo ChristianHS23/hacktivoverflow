@@ -1,5 +1,5 @@
 <template>
-    <div id="formQuestion">
+    <div id="edit-question-component">
         <v-stepper v-model="e1">
             <v-stepper-header>
             <v-stepper-step :complete="e1 > 1" step="1">Title</v-stepper-step>
@@ -55,7 +55,7 @@
 
                 <v-btn
                 color="primary"
-                @click="createQuestion"
+                @click="updateQuestion"
                 >
                 Done
                 </v-btn>
@@ -72,23 +72,32 @@
 
 <script>
 export default {
-  data () {
-    return {
-      e1: 0,
-      question: {
-        title: '',
-        description: ''
-      },
-      rules: {
-        required: value => !!value || 'Required.'
-      }
-    }
-  },
-  methods: {
-    createQuestion () {
-      this.$store.dispatch('createQuestion', this.question)
-    }
-  }
+    data() {
+        return {
+            e1: 0,
+            rules: {
+                required: value => !!value || 'Required.'
+            },
+        }
+    },
+    computed: {
+        question () {
+            return this.$store.state.question
+        }
+    },
+    methods: {
+        updateQuestion () {
+            let objUpdate = {
+                question: this.question,
+                questionId: this.$route.params.id
+            }
+            this.$store.dispatch('updateQuestion', objUpdate)
+        }
+    },
+    created() {
+        this.$store.dispatch('getSingleQuestion', this.$route.params.id)
+    },
+
 }
 </script>
 

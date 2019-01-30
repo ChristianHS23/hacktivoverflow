@@ -3,9 +3,6 @@ var Schema = mongoose.Schema
 const Question = require('./question')
 
 var answerSchema = new Schema({
-    title : {
-        type: String
-    },
     description : {
         type: String,
         required: [true, 'Answer Must Containt Description']

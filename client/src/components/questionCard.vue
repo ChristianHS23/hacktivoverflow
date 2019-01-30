@@ -27,7 +27,7 @@
                         </v-flex>
                     </v-layout>
                 </v-flex>
-                
+
                 <v-flex xs9>
                     <v-card-title>
                         <div class="text-truncate">
@@ -53,7 +53,7 @@
                         </v-flex>
                         <v-spacer></v-spacer>
                         <v-flex xs12>
-                            <small>{{Date(question.created_at).toString()}}</small>
+                            <small>{{question.created_at}}</small>
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -65,19 +65,19 @@
 
 <script>
 export default {
-    name: 'CardQuestion',
-    props: ['question'],
-    methods: {
-        getVote() {
-            if(!this.question.voters.length) {
-                return this.question.voters.length
-            } else{
-                let upvote = this.question.voters.filter(e => e.status === "upvote").length
-                let downvote = this.question.voters.filter(e => e.status === "downvote").length
-                return upvote - downvote
-            }
-        }
-    },
+  name: 'CardQuestion',
+  props: ['question'],
+  methods: {
+    getVote () {
+      if (!this.question.voters.length) {
+        return this.question.voters.length
+      } else {
+        let upvote = this.question.voters.filter(e => e.status === 'upvote').length
+        let downvote = this.question.voters.filter(e => e.status === 'downvote').length
+        return upvote - downvote
+      }
+    }
+  }
 }
 </script>
 

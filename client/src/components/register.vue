@@ -91,14 +91,14 @@ export default {
     registerUser () {
       this.$store.dispatch('registerUser', this.user)
         .then(() => {
-          this.user.email = '',
-          this.user.password = '',
+          this.user.email = ''
+          this.user.password = ''
           this.user.username = ''
           this.dialog = false
         })
         .catch(() => {
-          this.user.email = '',
-          this.user.password = '',
+          this.user.email = ''
+          this.user.password = ''
           this.user.username = ''
         })
     }
