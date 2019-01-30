@@ -12,6 +12,8 @@ Built with Express and Mongoose on server side. and built with Vue on client sid
 | PUT | /question/:id | `token` | title (string), description (string) | Update question | return Updated question Object | return error|
 | PUT | /question/vote/:id | `token` | status(string between 'upvote' or 'downvote' ) | Update question vote | return Updated question Object | return error|
 | DELETE | /question/:id | `token` | | Delete question | return Success | return error|
+
+
 **Answer Endpoints**
 | METHOD | ENDPOINT | HEADERS | BODY | DESCRIPTION | SUCCESS | ERROR|
 |--------|----------|---------|------|------------| -- | -- |
@@ -20,6 +22,8 @@ Built with Express and Mongoose on server side. and built with Vue on client sid
 | GET | /answer/:id | `token` | | Get One answer | return One answer | return error|
 | PUT | /answer/:id | `token` | description (string) | Update answer | return Updated answer Object | return error|
 | PUT | /answer/vote/:id | `token` | status(string between 'upvote' or 'downvote' ) | Update answer vote | return Updated answer Object | return error|
+
+
 **Users Endpoint**
 | METHOD |  ENDPOINT| HEADERS | BODY | DESCRIPTION | SUCCESS | ERROR|
 |---------|---------|---------| ---------| --------- | -- | -- |
