@@ -1,6 +1,7 @@
 <template>
     <v-container py-3 my-1>
-        <v-card>
+        <v-card
+        height="150">
             <v-layout>
                 <v-flex xs1>
                     <v-layout column>
@@ -36,9 +37,7 @@
                         </div>
                     </v-card-title>
                     <v-card-text>
-                        <div class="text-truncate">
-                            {{question.description}}
-                        </div>
+                        <p class="text-truncate" v-html="question.description"></p>
                     </v-card-text>
                 </v-flex>
 

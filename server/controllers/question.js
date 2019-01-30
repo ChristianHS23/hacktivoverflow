@@ -4,6 +4,7 @@ class QuestionController {
     static create(req, res) {
         let author = req.user._id
         let { title, description} = req.body
+        console.log(req.body)
         Question.create({title, description, author})
         .then(question => {
             res.status(201).json(question)
@@ -153,6 +154,7 @@ class QuestionController {
             }
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({
                 msg: 'Internal Server Error'
             })

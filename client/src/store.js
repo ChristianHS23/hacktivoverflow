@@ -3,12 +3,15 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueSwal from 'vue-swal'
+import wysiwyg from "vue-wysiwyg";
 
+Vue.use(wysiwyg, {}); // config is optional. more below
 Vue.use(Vuex)
 Vue.use(VueSwal)
 Vue.use(VueAxios, axios)
 
 let server = 'http://localhost:3000'
+
 
 export default new Vuex.Store({
   state: {
@@ -34,11 +37,45 @@ export default new Vuex.Store({
     },
     mgetsinglequestion(state, data) {
       state.question = data
+    },
+    mpushquestion(state, data) {
+      state.questions.push(data)
     }
   },
   actions: {
     checkLogin({commit}) {
       commit('mcheckLogin')
+    },
+
+    createQuestion({commit}, objCreate) {
+      let token = localStorage.getItem('token')
+      axios.post(`${server}/question`, objCreate, {headers : {
+        'Content-Type': 'application/json',
+        token
+      }})
+      .then((result) =>{
+        commit('mpushquestion', result)
+      })
+      .catch((err)=> {
+        console.log(err)
+      })
+    },
+
+    createAnswer({commit}, objCreate) {
+      let token = localStorage.getItem('token')
+      return new Promise((resolve, reject) => {
+        axios.post(`${server}/answer/${objCreate.questionId}`, objCreate.answer, {headers : {
+          'Content-Type': 'application/json',
+          token
+        }})
+        .then((result) => {
+          console.log(result)
+          resolve(result)
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
     },
 
     getQuestion({commit}) {
@@ -47,10 +84,99 @@ export default new Vuex.Store({
         url: `${server}/question/`
       })
       .then(({data}) => {
+        data.description = data.map(e => e.description = e.description.slice(0, 200))
         commit('mgetquestion', data)
       })
       .catch(err => {
         console.log(err)
+      })
+    },
+
+    upvoteQuestion({commit}, questionId) {
+      let token = localStorage.getItem('token')
+      return new Promise((resolve, reject)=> {
+        axios({
+          method: 'put',
+          url: `${server}/question/vote/${questionId}`,
+          data: {status: 'upvote'},
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        })
+        .then(() => {
+          console.log('Success Upvote Question')
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
+      })
+    },
+
+    downvoteQuestion({commit}, questionId) {
+      let token = localStorage.getItem('token')
+      return new Promise((resolve, reject)=> {
+        axios({
+          method: 'put',
+          url: `${server}/question/vote/${questionId}`,
+          data: {status: 'downvote'},
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        })
+        .then(() => {
+          console.log('Success Downvote Question')
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
+      })
+    },
+
+    upvoteAnswer({commit}, answerId) {
+      let token = localStorage.getItem('token')
+      return new Promise((resolve, reject)=> {
+        axios({
+          method: 'put',
+          url: `${server}/answer/vote/${answerId}`,
+          data: {status: 'upvote'},
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        })
+        .then(() => {
+          console.log('Success Upvote Answer')
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
+      })
+    },
+
+    downvoteAnswer({commit}, answerId) {
+      let token = localStorage.getItem('token')
+      return new Promise((resolve, reject)=> {
+        axios({
+          method: 'put',
+          url: `${server}/answer/vote/${answerId}`,
+          data: {status: 'downvote'},
+          headers: {
+            'Content-Type': 'application/json',
+            token
+          }
+        })
+        .then(() => {
+          console.log('Success Downvote Answer')
+          resolve()
+        })
+        .catch((err) => {
+          reject(err)
+        })
       })
     },
 

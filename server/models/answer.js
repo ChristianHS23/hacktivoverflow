@@ -4,8 +4,7 @@ const Question = require('./question')
 
 var answerSchema = new Schema({
     title : {
-        type: String,
-        required: [true, 'Answer Must Containt Title']
+        type: String
     },
     description : {
         type: String,
@@ -37,9 +36,14 @@ answerSchema.pre('save', function(next) {
     Question.findOne({_id: this.question})
     .then(questionData => {
         if(questionData) {
-            questionData.answers.push(this._id)
-            questionData.save()
-            next()
+            let validasi = questionData.answers.filter(e => e._id.toString() === this._id.toString())
+            if(validasi.length) {
+                next()
+            } else {
+                questionData.answers.push(this._id)
+                questionData.save()
+                next()
+            }
         } else {
             next('Question Not Found')
         }
