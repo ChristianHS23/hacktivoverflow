@@ -2,7 +2,10 @@
 
 Built with Express and Mongoose on server side. and built with Vue on client side
 
+
 **Question Endpoints**
+
+
 | METHOD | ENDPOINT | HEADERS | BODY | DESCRIPTION | SUCCESS | ERROR|
 |--------|----------|---------|------|------------| -- | -- |
 | POST | /question| `token` | title (string), description (string) | Create question | return New Question Object | return error|
@@ -15,6 +18,8 @@ Built with Express and Mongoose on server side. and built with Vue on client sid
 
 
 **Answer Endpoints**
+
+
 | METHOD | ENDPOINT | HEADERS | BODY | DESCRIPTION | SUCCESS | ERROR|
 |--------|----------|---------|------|------------| -- | -- |
 | POST | /answer/:questionId| `token` | description (string) | Create answer | return New Answer Object | return error|
@@ -25,6 +30,8 @@ Built with Express and Mongoose on server side. and built with Vue on client sid
 
 
 **Users Endpoint**
+
+
 | METHOD |  ENDPOINT| HEADERS | BODY | DESCRIPTION | SUCCESS | ERROR|
 |---------|---------|---------| ---------| --------- | -- | -- |
 | POST |  /users/register | `none` | username (string), email (string),  password (string) | Create user | return User Object | return error|
